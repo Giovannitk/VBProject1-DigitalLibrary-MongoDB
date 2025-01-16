@@ -11,30 +11,16 @@ Public Class MainForm
     Private textBoxYear As TextBox
     Private bookList As New List(Of Book)()
 
+    'Costruttore
     Public Sub New()
         ' Creazione delle TextBox e Label
         textBoxTitle = CustomLabelTextbox("Title: ", 30, 30, 200, 20, 30, 50, 200, 20)
         textBoxAuthor = CustomLabelTextbox("Author: ", 30, 80, 200, 20, 30, 100, 200, 20)
         textBoxYear = CustomLabelTextbox("Year: ", 30, 130, 200, 20, 30, 150, 200, 20)
 
-        ' Pulsanti
-        Dim buttonAdd As New Button()
-        buttonAdd.Text = "Add new book"
-        buttonAdd.Location = New Drawing.Point(30, 190)
-        buttonAdd.Size = New Drawing.Size(100, 40)
-
-        Dim buttonView As New Button()
-        buttonView.Text = "View Books"
-        buttonView.Location = New Drawing.Point(160, 190)
-        buttonView.Size = New Drawing.Size(100, 40)
-
-        ' Eventi Click
-        AddHandler buttonAdd.Click, AddressOf Handle_ButtonAdd
-        AddHandler buttonView.Click, AddressOf Handle_ButtonView
-
-        ' Aggiunta al form
-        Me.Controls.Add(buttonAdd)
-        Me.Controls.Add(buttonView)
+        ' Creazione dei pulsanti con i rispettivi gestori di eventi
+        CustomButton("Add new Book", 30, 190, 100, 40, AddressOf Handle_ButtonAdd)
+        CustomButton("View Books", 160, 190, 100, 40, AddressOf Handle_ButtonView)
     End Sub
 
     Private Sub Handle_ButtonAdd(sender As Object, e As EventArgs)
@@ -83,6 +69,26 @@ Public Class MainForm
 
         Return customTextBox
     End Function
+
+    Private Function CustomButton(text_button As String, button_x As Integer,
+        button_y As Integer, button_width As Integer, button_height As Integer,
+        clickHandler As EventHandler) As Button
+
+        ' Creazione del pulsante
+        Dim button As New Button()
+        button.Text = text_button
+        button.Location = New Drawing.Point(button_x, button_y)
+        button.Size = New Drawing.Size(button_width, button_height)
+
+        ' Associazione del gestore di eventi
+        AddHandler button.Click, clickHandler
+
+        ' Aggiunta al form
+        Me.Controls.Add(button)
+
+        Return button
+    End Function
+
 End Class
 
 Module Program

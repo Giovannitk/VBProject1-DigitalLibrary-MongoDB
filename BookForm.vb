@@ -13,9 +13,10 @@ Namespace MyLibrary
         End Sub
 
         Public Overrides Function ToString() As String
-            Return "Titolo: " & Me.title & " | Autore: " & Me.autore &
-                " | Anno di pubblicazione: " & Me.anno &
-                " | Descrizione: " & Me.descrizione
+            Return "Title: " & Me.title & " | Author: " & Me.autore &
+                " | Publication year: " & Me.anno &
+                " | Description: " & If(String.IsNullOrEmpty(Me.descrizione), "Not Found", Me.descrizione)
         End Function
+
     End Class
 End Namespace
