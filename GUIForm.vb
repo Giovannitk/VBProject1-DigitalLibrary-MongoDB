@@ -25,6 +25,7 @@ Public Class MainForm
         CustomButton("Add new Book", 30, 190, 100, 40, AddressOf Handle_ButtonAdd)
         CustomButton("View Books", 160, 190, 100, 40, AddressOf Handle_ButtonView)
         CustomButton("Search Book", 30, 250, 100, 40, AddressOf Handle_ButtonSearch)
+        CustomButton("Remove Book", 160, 250, 100, 40, AddressOf Handle_ButtonRemove)
     End Sub
 
     Private Sub Handle_ButtonAdd(sender As Object, e As EventArgs)
@@ -75,6 +76,40 @@ Public Class MainForm
             Next
             MessageBox.Show("Book '" & textBoxTitle.Text & "' not found!")
             textBoxTitle.Text = ""
+        End If
+    End Sub
+
+    Private Sub Handle_ButtonRemove(sender As Object, e As EventArgs)
+        If bookList.Count = 0 Then
+            MessageBox.Show("No books available.")
+        Else
+            If String.IsNullOrEmpty(textBoxTitle.Text) Or String.IsNullOrEmpty(textBoxYear.Text) Then
+                MessageBox.Show("Please enter a title and an year to remove a book.")
+                Return
+            End If
+
+            For Each book As Book In bookList
+                If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) And book.Year = cint(textBoxYear.Text) Then
+                    Dim Msg, Style, Title, Response
+                    Msg = "Are you sure?"    ' Define message.
+                    Style = vbYesNo    ' Define buttons.
+                    Title = "Msg Confirm"    ' Define title.
+
+                    Response = MsgBox(Msg, Style, Title)
+                    If Response = vbYes Then    ' User chose Yes.
+                        bookList.Remove(book)
+                        MessageBox.Show("Book deleted: " & book.ToString())
+                    Else    ' User chose No.
+                        Return
+                    End If
+                    textBoxTitle.Text = ""
+                    textBoxYear.Text = ""
+                    Return
+                End If
+            Next
+            MessageBox.Show("Book '" & textBoxTitle.Text & " [" & textBoxYear.Text & "]" & "' not found!")
+            textBoxTitle.Text = ""
+            textBoxYear.Text = ""
         End If
     End Sub
 
