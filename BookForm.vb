@@ -1,21 +1,22 @@
 Namespace MyLibrary
     Public Class Book
-        Private title As String
-        Private autore As String
-        Private anno As Integer
-        Public Property descrizione As String
+        Public Property Title As String
+        Public Property Author As String
+        Public Property Year As Integer
+        Public Property Description As String
 
-        Public Sub New(title As String, autore As String, anno As Integer)
-            Me.title = title
-            Me.autore = autore
-            Me.anno = anno
-            Me.descrizione = String.Empty
+        Public Sub New(title As String, author As String, year As Integer)
+            Me.Title = Title
+            Me.Author = Author
+            Me.Year = Year
+            Me.Description = String.Empty
         End Sub
 
+
         Public Overrides Function ToString() As String
-            Return "Title: " & Me.title & " | Author: " & Me.autore &
-                " | Publication year: " & Me.anno &
-                " | Description: " & If(String.IsNullOrEmpty(Me.descrizione), "Not Found", Me.descrizione)
+            Return "Title: " & Me.Title & " | Author: " & Me.Author & _
+                " | Publication year: " & Me.Year & _
+                " | Description: " & If(String.IsNullOrEmpty(Me.Description), "Not Found", Me.Description)
         End Function
 
     End Class

@@ -10,7 +10,7 @@ if ($files.Count -eq 0) {
 }
 
 # Ordina i file in modo che GUIForm.vb venga compilato per primo
-$sortedFiles = $files | Sort-Object { $_.Name -eq "GUIForm.vb" -and $_.Name -ne $null }
+$sortedFiles = $files | Sort-Object -Property @{ Expression = { $_.Name -eq "GUIForm.vb" } } -Descending
 
 # Costruisci gli argomenti per il compilatore VBC
 $vbcArgs = @(

@@ -1,6 +1,7 @@
 Imports System.Windows.Forms
 Imports MyLibrary
 Imports System.Collections.Generic
+Imports System.Drawing ' Import per Size
 
 Public Class MainForm
     Inherits Form
@@ -11,8 +12,10 @@ Public Class MainForm
     Private textBoxYear As TextBox
     Private bookList As New List(Of Book)()
 
-    'Costruttore
+    ' Costruttore
     Public Sub New()
+        Me.Size = New Size(300, 350)
+
         ' Creazione delle TextBox e Label
         textBoxTitle = CustomLabelTextbox("Title: ", 30, 30, 200, 20, 30, 50, 200, 20)
         textBoxAuthor = CustomLabelTextbox("Author: ", 30, 80, 200, 20, 30, 100, 200, 20)
@@ -21,10 +24,11 @@ Public Class MainForm
         ' Creazione dei pulsanti con i rispettivi gestori di eventi
         CustomButton("Add new Book", 30, 190, 100, 40, AddressOf Handle_ButtonAdd)
         CustomButton("View Books", 160, 190, 100, 40, AddressOf Handle_ButtonView)
+        CustomButton("Search Book", 30, 250, 100, 40, AddressOf Handle_ButtonSearch)
     End Sub
 
     Private Sub Handle_ButtonAdd(sender As Object, e As EventArgs)
-        If String.IsNullOrEmpty(textBoxTitle.Text) Or String.IsNullOrEmpty(textBoxAuthor.Text) Or String.IsNullOrEmpty(textBoxYear.Text) Then
+        If String.IsNullOrEmpty(textBoxTitle.Text) OrElse String.IsNullOrEmpty(textBoxAuthor.Text) OrElse String.IsNullOrEmpty(textBoxYear.Text) Then
             MessageBox.Show("Please enter a title, an author, and a year.")
             Return
         End If
@@ -37,15 +41,40 @@ Public Class MainForm
 
         Dim newBook As New Book(textBoxTitle.Text, textBoxAuthor.Text, year)
         bookList.Add(newBook)
-        MessageBox.Show("Book added successfully: " & vbCrLf & newBook.ToString())
+        MessageBox.Show("Book added successfully: " & Environment.NewLine & newBook.ToString())
+
+        textBoxTitle.Text = ""
+        textBoxAuthor.Text = ""
+        textBoxYear.Text = ""
     End Sub
 
     Private Sub Handle_ButtonView(sender As Object, e As EventArgs)
         If bookList.Count = 0 Then
             MessageBox.Show("No books available.")
         Else
-            Dim booksInfo As String = String.Join(vbCrLf, bookList.Select(Function(b) b.ToString()))
-            MessageBox.Show("Books in the library: " & vbCrLf & booksInfo)
+            Dim booksInfo As String = String.Join(Environment.NewLine, bookList.Select(Function(b) b.ToString()))
+            MessageBox.Show("Books in the library: " & Environment.NewLine & booksInfo)
+        End If
+    End Sub
+
+    Private Sub Handle_ButtonSearch(sender As Object, e As EventArgs)
+        If bookList.Count = 0 Then
+            MessageBox.Show("No books available.")
+        Else
+            If String.IsNullOrEmpty(textBoxTitle.Text) Then
+                MessageBox.Show("Please enter a title to search a book.")
+                Return
+            End If
+
+            For Each book As Book In bookList
+                If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) Then
+                    MessageBox.Show("Book searched: " & book.ToString())
+                    textBoxTitle.Text = ""
+                    Return
+                End If
+            Next
+            MessageBox.Show("Book '" & textBoxTitle.Text & "' not found!")
+            textBoxTitle.Text = ""
         End If
     End Sub
 
@@ -58,13 +87,13 @@ Public Class MainForm
 
         Dim customLabel As New Label()
         customLabel.Text = label_text
-        customLabel.Location = New Drawing.Point(label_x, label_y)
-        customLabel.Size = New Drawing.Size(label_width, label_height)
+        customLabel.Location = New Point(label_x, label_y)
+        customLabel.Size = New Size(label_width, label_height)
         Me.Controls.Add(customLabel)
 
         Dim customTextBox As New TextBox()
-        customTextBox.Location = New Drawing.Point(textbox_x, textbox_y)
-        customTextBox.Size = New Drawing.Size(textbox_width, textbox_height)
+        customTextBox.Location = New Point(textbox_x, textbox_y)
+        customTextBox.Size = New Size(textbox_width, textbox_height)
         Me.Controls.Add(customTextBox)
 
         Return customTextBox
@@ -74,18 +103,12 @@ Public Class MainForm
         button_y As Integer, button_width As Integer, button_height As Integer,
         clickHandler As EventHandler) As Button
 
-        ' Creazione del pulsante
         Dim button As New Button()
         button.Text = text_button
-        button.Location = New Drawing.Point(button_x, button_y)
-        button.Size = New Drawing.Size(button_width, button_height)
-
-        ' Associazione del gestore di eventi
+        button.Location = New Point(button_x, button_y)
+        button.Size = New Size(button_width, button_height)
         AddHandler button.Click, clickHandler
-
-        ' Aggiunta al form
         Me.Controls.Add(button)
-
         Return button
     End Function
 
