@@ -1,7 +1,9 @@
 Imports System.Windows.Forms
-Imports MyLibrary
 Imports System.Collections.Generic
 Imports System.Drawing ' Import per Size
+
+Imports MyLibrary ' Per accedere alla classe Book
+Imports MyLibrary.GUI ' Per accedere ad altre finestre, come OtherOptionsForm
 
 Public Class MainForm
     Inherits Form
@@ -14,7 +16,7 @@ Public Class MainForm
 
     ' Costruttore
     Public Sub New()
-        Me.Size = New Size(300, 350)
+        Me.Size = New Size(300, 400)
 
         ' Creazione delle TextBox e Label
         textBoxTitle = CustomLabelTextbox("Title: ", 30, 30, 200, 20, 30, 50, 200, 20)
@@ -26,6 +28,8 @@ Public Class MainForm
         CustomButton("View Books", 160, 190, 100, 40, AddressOf Handle_ButtonView)
         CustomButton("Search Book", 30, 250, 100, 40, AddressOf Handle_ButtonSearch)
         CustomButton("Remove Book", 160, 250, 100, 40, AddressOf Handle_ButtonRemove)
+
+        CustomButton("Other Options", 30, 310, 230, 40, AddressOf Handle_ButtonOtherOptions)
     End Sub
 
     Private Sub Handle_ButtonAdd(sender As Object, e As EventArgs)
@@ -111,6 +115,19 @@ Public Class MainForm
             textBoxTitle.Text = ""
             textBoxYear.Text = ""
         End If
+    End Sub
+
+    ' Gestore evento per aprire la finestra secondaria
+    Private Sub Handle_ButtonOtherOptions(sender As Object, e As EventArgs)
+        ' Nascondi la finestra principale
+        Me.Hide()
+
+        ' Apri la finestra delle altre opzioni
+        Dim otherOptionsForm As New OtherOptionsForm(Me) ' Passa la finestra corrente come parametro
+        otherOptionsForm.ShowDialog()
+
+        ' Mostra nuovamente la finestra principale dopo la chiusura di OtherOptionsForm
+        Me.Show()
     End Sub
 
     Private Function CustomLabelTextbox(
