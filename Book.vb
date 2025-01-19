@@ -1,4 +1,6 @@
-Namespace MyLibrary
+Imports System.Collections.Generic
+
+Namespace Models
     Public Class Book
         Public Property Title As String
         Public Property Author As String
