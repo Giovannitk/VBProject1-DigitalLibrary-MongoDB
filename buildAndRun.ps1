@@ -1,40 +1,12 @@
-# buildAndRun.ps1
+# Cambia directory nel progetto
+Set-Location -Path "C:\Users\giovy\Desktop\visual_basic\VBProject1_LibreriaDigitale_MongoDB"
 
-# Ottieni i file .vb presenti nella directory
-$files = Get-ChildItem -Path $pwd -Filter "*.vb"
+# Pulizia, compilazione e avvio del progetto
+dotnet clean
+dotnet build
 
-# Verifica che ci siano file da compilare
-if ($files.Count -eq 0) {
-    Write-Host "Nessun file VB trovato per la compilazione."
-    Exit
-}
-
-# Ordina i file in modo che GUIForm.vb venga compilato per primo
-$sortedFiles = $files | Sort-Object -Property @{ Expression = { $_.Name -eq "GUIForm.vb" } } -Descending
-
-# Costruisci gli argomenti per il compilatore VBC
-$vbcArgs = @(
-    "/nologo",
-    "/main:Program",
-    "/out:GUIForm.exe"
-)
-
-# Aggiungi i file .vb al comando, racchiudendo i percorsi tra virgolette
-foreach ($file in $sortedFiles) {
-    $vbcArgs += '"' + $file.FullName + '"'
-}
-
-# Unisci gli argomenti in una stringa
-$vbcCommand = "vbc " + ($vbcArgs -join " ")
-
-# Compilazione
-Write-Host "Compilando con i seguenti argomenti: $vbcCommand"
-Invoke-Expression $vbcCommand
-
-# Controlla se il file eseguibile è stato creato
-if (Test-Path ".\GUIForm.exe") {
-    Write-Host "Eseguendo il programma GUIForm.exe"
-    .\GUIForm.exe
+if ($?) {
+    dotnet run
 } else {
-    Write-Host "Compilazione fallita o file GUIForm.exe non trovato."
+    Write-Host "Build failed. Please check the errors above." -ForegroundColor Red
 }

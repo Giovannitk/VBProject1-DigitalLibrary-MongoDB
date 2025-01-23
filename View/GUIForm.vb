@@ -2,8 +2,8 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Drawing ' Import per Size
 
-Imports Models ' Per accedere alla classe Book
-Imports MyLibrary.GUI ' Per accedere ad altre finestre, come OtherOptionsForm
+'Imports Models ' Per accedere alla classe Book
+'Imports MyLibrary.GUI ' Per accedere ad altre finestre, come OtherOptionsForm
 
 Namespace View
     Public Class MainForm
@@ -13,7 +13,9 @@ Namespace View
         Private textBoxTitle As TextBox
         Private textBoxAuthor As TextBox
         Private textBoxYear As TextBox
-        Private bookList As New List(Of Book)()
+        Private bookList As New List(Of Models.Book)()
+
+        Private bookController As New Controllers.BookController()
 
         ' Costruttore
         Public Sub New()
@@ -45,8 +47,15 @@ Namespace View
                 Return
             End If
 
-            Dim newBook As New Book(textBoxTitle.Text, textBoxAuthor.Text, year)
-            bookList.Add(newBook)
+            'Dim newBook As New Book(textBoxTitle.Text, textBoxAuthor.Text, year)
+            ' bookList.Add(newBook)
+            Dim newBook As New models.Book With {
+                .Title = textBoxTitle.Text,
+                .Author = textBoxAuthor.Text,
+                .Year = Convert.ToInt32(textBoxYear.Text)
+            }
+            bookController.AddBook(newBook)
+
             MessageBox.Show("Book added successfully: " & Environment.NewLine & newBook.ToString())
 
             textBoxTitle.Text = ""
@@ -72,7 +81,7 @@ Namespace View
                     Return
                 End If
 
-                For Each book As Book In bookList
+                For Each book As models.Book In bookList
                     If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) Then
                         MessageBox.Show("Book searched: " & book.ToString())
                         textBoxTitle.Text = ""
@@ -93,7 +102,7 @@ Namespace View
                     Return
                 End If
 
-                For Each book As Book In bookList
+                For Each book As models.Book In bookList
                     If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) And book.Year = cint(textBoxYear.Text) Then
                         Dim Msg, Style, Title, Response
                         Msg = "Are you sure?"    ' Define message.

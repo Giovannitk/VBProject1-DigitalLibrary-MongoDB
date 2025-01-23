@@ -1,8 +1,8 @@
 Imports System.Windows.Forms
 Imports System.Drawing
 
-Namespace MyLibrary.GUI
-    Public Class InputForm
+Namespace View
+    Public Class EnterDescriptionForm
         Inherits Form
 
         Private textBoxTitle As TextBox

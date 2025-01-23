@@ -1,7 +1,7 @@
 Imports System.Windows.Forms
 Imports System.Drawing
 
-Namespace MyLibrary.GUI
+Namespace View
     Public Class OtherOptionsForm
         Inherits Form
 
@@ -40,7 +40,7 @@ Namespace MyLibrary.GUI
         Private Sub Handle_AddDescription(sender As Object, e As EventArgs)
             Me.Hide()
 
-            Dim inputForm As New InputForm(Me)
+            Dim inputForm As New EnterDescriptionForm(Me)
             inputForm.ShowDialog() ' Mostra una finestra popup per l'inserimento
 
             Me.Show()

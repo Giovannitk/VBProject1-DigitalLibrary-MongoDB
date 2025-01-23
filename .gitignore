@@ -1,0 +1,3 @@
+# Ignora le cartelle di compilazione
+/bin/
+/obj/
