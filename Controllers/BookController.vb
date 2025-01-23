@@ -4,8 +4,8 @@ Namespace Controllers
     Public Class BookController
         Private repository As Models.BookRepository
 
-        Public Sub New()
-            repository = New Models.BookRepository()
+        Public Sub New(connectionString As String, databaseName As String, collectionName As String)
+            repository = New Models.BookRepository(connectionString, databaseName, collectionName)
         End Sub
 
         Public Sub AddBook(book As Models.Book)

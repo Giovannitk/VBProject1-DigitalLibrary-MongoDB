@@ -15,7 +15,9 @@ Namespace View
         Private textBoxYear As TextBox
         Private bookList As New List(Of Models.Book)()
 
-        Private bookController As New Controllers.BookController()
+        Private bookController As New Controllers.BookController("mongodb://localhost:27017", 
+               "LibraryDB", 
+               "Books")
 
         ' Costruttore
         Public Sub New()
@@ -64,6 +66,7 @@ Namespace View
         End Sub
 
         Private Sub Handle_ButtonView(sender As Object, e As EventArgs)
+            bookList = bookController.GetBooks()
             If bookList.Count = 0 Then
                 MessageBox.Show("No books available.")
             Else
