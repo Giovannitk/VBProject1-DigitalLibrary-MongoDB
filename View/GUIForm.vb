@@ -76,37 +76,88 @@ Namespace View
         End Sub
 
         Private Sub Handle_ButtonSearch(sender As Object, e As EventArgs)
-            If bookList.Count = 0 Then
-                MessageBox.Show("No books available.")
-            Else
-                If String.IsNullOrEmpty(textBoxTitle.Text) Then
-                    MessageBox.Show("Please enter a title to search a book.")
-                    Return
-                End If
-
-                For Each book As models.Book In bookList
-                    If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) Then
-                        MessageBox.Show("Book searched: " & book.ToString())
-                        textBoxTitle.Text = ""
+            Try
+                bookList = bookController.GetBooks()
+                If bookList.Count = 0 Then
+                    MessageBox.Show("No books available.")
+                Else
+                    If String.IsNullOrEmpty(textBoxTitle.Text) Or String.IsNullOrEmpty(textBoxYear.Text) Then
+                        MessageBox.Show("Please enter a title and an year to search a book.")
                         Return
                     End If
-                Next
-                MessageBox.Show("Book '" & textBoxTitle.Text & "' not found!")
-                textBoxTitle.Text = ""
-            End If
+
+                    ' For Each book As models.Book In bookList
+                    '     If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) Then
+                    '         MessageBox.Show("Book searched: " & book.ToString())
+                    '         textBoxTitle.Text = ""
+                    '         Return
+                    '     End If
+                    ' Next
+
+                    Dim book As New models.Book
+                    book = bookController.GetBook(textBoxTitle.Text, Convert.ToInt32(textBoxYear.Text))
+                    'MessageBox.Show($"book --> {book}")
+                    If book IsNot Nothing Then
+                        MessageBox.Show("Book searched: " & book.ToString())
+                        textBoxTitle.Text = ""
+                        textBoxYear.Text = ""
+                    Else
+                        MessageBox.Show($"Book {textBoxTitle.Text} from {textBoxYear.Text}  not found!")
+                    End If
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Error: " & ex.Message)
+                MessageBox.Show("Stack Trace: " & vbCrLf & ex.StackTrace)
+            End Try
         End Sub
 
         Private Sub Handle_ButtonRemove(sender As Object, e As EventArgs)
-            If bookList.Count = 0 Then
-                MessageBox.Show("No books available.")
-            Else
-                If String.IsNullOrEmpty(textBoxTitle.Text) Or String.IsNullOrEmpty(textBoxYear.Text) Then
-                    MessageBox.Show("Please enter a title and an year to remove a book.")
-                    Return
-                End If
+            ' If bookList.Count = 0 Then
+            '     MessageBox.Show("No books available.")
+            ' Else
+            '     If String.IsNullOrEmpty(textBoxTitle.Text) Or String.IsNullOrEmpty(textBoxYear.Text) Then
+            '         MessageBox.Show("Please enter a title and an year to remove a book.")
+            '         Return
+            '     End If
 
-                For Each book As models.Book In bookList
-                    If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) And book.Year = cint(textBoxYear.Text) Then
+            '     For Each book As models.Book In bookList
+            '         If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) And book.Year = cint(textBoxYear.Text) Then
+            '             Dim Msg, Style, Title, Response
+            '             Msg = "Are you sure?"    ' Define message.
+            '             Style = vbYesNo    ' Define buttons.
+            '             Title = "Msg Confirm"    ' Define title.
+
+            '             Response = MsgBox(Msg, Style, Title)
+            '             If Response = vbYes Then    ' User chose Yes.
+            '                 bookList.Remove(book)
+            '                 MessageBox.Show("Book deleted: " & book.ToString())
+            '             Else    ' User chose No.
+            '                 Return
+            '             End If
+            '             textBoxTitle.Text = ""
+            '             textBoxYear.Text = ""
+            '             Return
+            '         End If
+            '     Next
+            '     MessageBox.Show("Book '" & textBoxTitle.Text & " [" & textBoxYear.Text & "]" & "' not found!")
+            '     textBoxTitle.Text = ""
+            '     textBoxYear.Text = ""
+            ' End If
+
+            Try
+                bookList = bookController.GetBooks()
+                If bookList.Count = 0 Then
+                    MessageBox.Show("No books available.")
+                Else
+                    If String.IsNullOrEmpty(textBoxTitle.Text) Or String.IsNullOrEmpty(textBoxYear.Text) Then
+                        MessageBox.Show("Please enter a title and an year to remove a book.")
+                        Return
+                    End If
+
+                    Dim book As New models.Book
+                    book = bookController.GetBook(textBoxTitle.Text, Convert.ToInt32(textBoxYear.Text))
+                    'MessageBox.Show($"book --> {book}")
+                    If book IsNot Nothing Then
                         Dim Msg, Style, Title, Response
                         Msg = "Are you sure?"    ' Define message.
                         Style = vbYesNo    ' Define buttons.
@@ -114,20 +165,21 @@ Namespace View
 
                         Response = MsgBox(Msg, Style, Title)
                         If Response = vbYes Then    ' User chose Yes.
-                            bookList.Remove(book)
+                            bookController.RemoveBook(book.Title, book.Year)
                             MessageBox.Show("Book deleted: " & book.ToString())
                         Else    ' User chose No.
                             Return
                         End If
                         textBoxTitle.Text = ""
                         textBoxYear.Text = ""
-                        Return
+                    Else
+                        MessageBox.Show($"Book {textBoxTitle.Text} from {textBoxYear.Text} not found!")
                     End If
-                Next
-                MessageBox.Show("Book '" & textBoxTitle.Text & " [" & textBoxYear.Text & "]" & "' not found!")
-                textBoxTitle.Text = ""
-                textBoxYear.Text = ""
-            End If
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Error: " & ex.Message)
+                MessageBox.Show("Stack Trace: " & vbCrLf & ex.StackTrace)
+            End Try
         End Sub
 
         ' Gestore evento per aprire la finestra secondaria

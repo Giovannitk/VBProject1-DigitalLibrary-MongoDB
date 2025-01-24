@@ -1,4 +1,5 @@
 Imports System.Collections.Generic
+Imports System.Windows.Forms
 
 Namespace Controllers
     Public Class BookController
@@ -16,8 +17,12 @@ Namespace Controllers
             Return repository.GetAllBooks()
         End Function
 
-        Public Function GetBook(title As String) As Models.Book
-            Return repository.GetAllBooks().FirstOrDefault(Function(b) b.Title = title)
+        Public Function GetBook(title As String, year As Integer) As Models.Book
+            Return repository.GetAllBooks().FirstOrDefault(Function(b) b.Title = title And b.Year = year)
         End Function
+
+        Public Sub RemoveBook(title As String, year As Integer)
+            repository.RemoveBookById(Me.GetBook(title, year).Id)
+        End Sub 
     End Class
 End Namespace

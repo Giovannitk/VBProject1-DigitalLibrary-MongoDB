@@ -30,13 +30,14 @@ Namespace Models
         End Function
 
         ' Metodo per cercare un libro per titolo
-        Public Function GetBookByTitle(title As String) As Book
-            Return _collection.Find(Function(b) b.Title = title).FirstOrDefault()
-        End Function
+        ' Public Function GetBookByTitle(title As String) As Book
+        '     Return _collection.Find(Function(b) b.Title = title).FirstOrDefault()
+        ' End Function
 
         ' Metodo per rimuovere un libro per ID
         Public Sub RemoveBookById(id As String)
-            _collection.DeleteOne(Function(b) b.Id = id)
+            Dim filter = Builders(Of Book).Filter.Eq(Function(b) b.Id, id)
+            _collection.DeleteOne(filter)
         End Sub
     End Class
 End Namespace
