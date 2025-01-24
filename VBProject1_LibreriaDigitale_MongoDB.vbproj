@@ -7,20 +7,6 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
-  <!--
-  <ItemGroup>
-    <Compile Include="Book.vb" />
-    <Compile Include="BookController.vb" />
-    <Compile Include="GUIForm.vb" />
-    <Compile Include="InputForm.vb" />
-    <Compile Include="OtherOptionsForm.vb" />
-    <Compile Include="Repository.vb" />
-  </ItemGroup>
-  -->
-  <!-- <ItemGroup>
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup> -->
-
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="3.1.0" />
   </ItemGroup>

@@ -1,15 +1,15 @@
 Imports System.Windows.Forms
 Imports System.Collections.Generic
-Imports System.Drawing ' Import per Size
+Imports System.Drawing ' Import for Size
 
-'Imports Models ' Per accedere alla classe Book
-'Imports MyLibrary.GUI ' Per accedere ad altre finestre, come OtherOptionsForm
+'Imports Models 'To access the Book class
+'Imports MyLibrary.GUI 'To  access others windows, such as OtherOptionsForm
 
 Namespace View
     Public Class MainForm
         Inherits Form
 
-        ' Variabili di classe
+        ' Class variables
         Private textBoxTitle As TextBox
         Private textBoxAuthor As TextBox
         Private textBoxYear As TextBox
@@ -19,16 +19,16 @@ Namespace View
                "LibraryDB", 
                "Books")
 
-        ' Costruttore
+        ' Constructor
         Public Sub New()
             Me.Size = New Size(300, 400)
 
-            ' Creazione delle TextBox e Label
+            ' Creation of TextBox and Label
             textBoxTitle = CustomLabelTextbox("Title: ", 30, 30, 200, 20, 30, 50, 200, 20)
             textBoxAuthor = CustomLabelTextbox("Author: ", 30, 80, 200, 20, 30, 100, 200, 20)
             textBoxYear = CustomLabelTextbox("Year: ", 30, 130, 200, 20, 30, 150, 200, 20)
 
-            ' Creazione dei pulsanti con i rispettivi gestori di eventi
+            ' Creation of buttons with respective event handlers.
             CustomButton("Add new Book", 30, 190, 100, 40, AddressOf Handle_ButtonAdd)
             CustomButton("View Books", 160, 190, 100, 40, AddressOf Handle_ButtonView)
             CustomButton("Search Book", 30, 250, 100, 40, AddressOf Handle_ButtonSearch)
@@ -49,8 +49,6 @@ Namespace View
                 Return
             End If
 
-            'Dim newBook As New Book(textBoxTitle.Text, textBoxAuthor.Text, year)
-            ' bookList.Add(newBook)
             Dim newBook As New models.Book With {
                 .Title = textBoxTitle.Text,
                 .Author = textBoxAuthor.Text,
@@ -86,17 +84,8 @@ Namespace View
                         Return
                     End If
 
-                    ' For Each book As models.Book In bookList
-                    '     If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) Then
-                    '         MessageBox.Show("Book searched: " & book.ToString())
-                    '         textBoxTitle.Text = ""
-                    '         Return
-                    '     End If
-                    ' Next
-
                     Dim book As New models.Book
                     book = bookController.GetBook(textBoxTitle.Text, Convert.ToInt32(textBoxYear.Text))
-                    'MessageBox.Show($"book --> {book}")
                     If book IsNot Nothing Then
                         MessageBox.Show("Book searched: " & book.ToString())
                         textBoxTitle.Text = ""
@@ -112,38 +101,6 @@ Namespace View
         End Sub
 
         Private Sub Handle_ButtonRemove(sender As Object, e As EventArgs)
-            ' If bookList.Count = 0 Then
-            '     MessageBox.Show("No books available.")
-            ' Else
-            '     If String.IsNullOrEmpty(textBoxTitle.Text) Or String.IsNullOrEmpty(textBoxYear.Text) Then
-            '         MessageBox.Show("Please enter a title and an year to remove a book.")
-            '         Return
-            '     End If
-
-            '     For Each book As models.Book In bookList
-            '         If book.Title.Equals(textBoxTitle.Text, StringComparison.OrdinalIgnoreCase) And book.Year = cint(textBoxYear.Text) Then
-            '             Dim Msg, Style, Title, Response
-            '             Msg = "Are you sure?"    ' Define message.
-            '             Style = vbYesNo    ' Define buttons.
-            '             Title = "Msg Confirm"    ' Define title.
-
-            '             Response = MsgBox(Msg, Style, Title)
-            '             If Response = vbYes Then    ' User chose Yes.
-            '                 bookList.Remove(book)
-            '                 MessageBox.Show("Book deleted: " & book.ToString())
-            '             Else    ' User chose No.
-            '                 Return
-            '             End If
-            '             textBoxTitle.Text = ""
-            '             textBoxYear.Text = ""
-            '             Return
-            '         End If
-            '     Next
-            '     MessageBox.Show("Book '" & textBoxTitle.Text & " [" & textBoxYear.Text & "]" & "' not found!")
-            '     textBoxTitle.Text = ""
-            '     textBoxYear.Text = ""
-            ' End If
-
             Try
                 bookList = bookController.GetBooks()
                 If bookList.Count = 0 Then
@@ -156,7 +113,6 @@ Namespace View
 
                     Dim book As New models.Book
                     book = bookController.GetBook(textBoxTitle.Text, Convert.ToInt32(textBoxYear.Text))
-                    'MessageBox.Show($"book --> {book}")
                     If book IsNot Nothing Then
                         Dim Msg, Style, Title, Response
                         Msg = "Are you sure?"    ' Define message.
@@ -164,10 +120,10 @@ Namespace View
                         Title = "Msg Confirm"    ' Define title.
 
                         Response = MsgBox(Msg, Style, Title)
-                        If Response = vbYes Then    ' User chose Yes.
+                        If Response = vbYes Then    ' User chooses Yes.
                             bookController.RemoveBook(book.Title, book.Year)
                             MessageBox.Show("Book deleted: " & book.ToString())
-                        Else    ' User chose No.
+                        Else    ' User chooses No.
                             Return
                         End If
                         textBoxTitle.Text = ""
@@ -182,16 +138,16 @@ Namespace View
             End Try
         End Sub
 
-        ' Gestore evento per aprire la finestra secondaria
+        ' Event handler to open the secondary window
         Private Sub Handle_ButtonOtherOptions(sender As Object, e As EventArgs)
-            ' Nascondi la finestra principale
+            ' Hide the main window
             Me.Hide()
 
-            ' Apri la finestra delle altre opzioni
-            Dim otherOptionsForm As New OtherOptionsForm(Me) ' Passa la finestra corrente come parametro
+            ' Open the window of other options
+            Dim otherOptionsForm As New OtherOptionsForm(Me) ' Pass the current window as parameter
             otherOptionsForm.ShowDialog()
 
-            ' Mostra nuovamente la finestra principale dopo la chiusura di OtherOptionsForm
+            ' Show the main window again after closing OtherOptionsForm
             Me.Show()
         End Sub
 
